@@ -37,5 +37,10 @@ for i in range(10):
 
 # generate caption
     print(model.generate({"image": image}))
-
+# in order to get the image description use the manifest API
+    response_parse = text.find("1.1/relation", response_parse) + 1
+    caption_request = text[text.find("id", response_parse) + 6:text.find("\"", text.find("id", response_parse) + 6)]
+    caption_response = requests.get(caption_request)
+    caption_text = json.dumps(caption_response.json(), indent=4)
+    print(caption_text)
 # key: AnGdUMDNPbU7IhCHgbreKF4Lou5spSCYklIFpWrc
