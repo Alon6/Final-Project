@@ -18,7 +18,8 @@ from PIL import Image
 import urllib.request as urllib
 import io
 
-# from google.cloud import translate_v2 as translate
+from mtranslate import translate
+import os
 
 
 def gen_cap(img_path):
@@ -105,7 +106,7 @@ def alon_api():
         raw_image = Image.open(image_file).convert("RGB")
 
         # begin new
-        raw_image.show()
+        # raw_image.show()
         # end new
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -127,13 +128,20 @@ def alon_api():
     # begin new
         caption_dict = json.loads(caption_response.text)
         label_value = caption_dict['sequences'][0]['label']
-        print("this is the 'real caption' before extracting the label: " + caption_text)
-        print("this is the real caption: ")
-        print(label_value)
+        # print("this is the 'real caption' before extracting the label: " + caption_text)
+        # print("this is the real caption before translation: ")
+        # print(label_value)
+        print("this is the real caption (after translation): ")
+        print(translate_cap(label_value))
         print()
     # end new
     # key: AnGdUMDNPbU7IhCHgbreKF4Lou5spSCYklIFpWrc
 
+def translate_cap(cap):
+    # we use the API of Microsoft to translate the label to English
+
+    translated_cap = translate(cap, "en")
+    return translated_cap
 
 def L2Norm(H1, H2):
     H1 = np.array(H1, dtype=np.int64)
